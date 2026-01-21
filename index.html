@@ -10,16 +10,16 @@
 <style>
 body{
   margin:0;
-  background:linear-gradient(180deg,#020924,#000);
-  color:#fff;
   font-family:system-ui;
+  background:#010111;
+  color:#fff;
 }
 .header{
   background:#0b1c3a;
-  padding:14px;
   text-align:center;
   font-weight:700;
   font-size:18px;
+  padding:14px;
 }
 .player-box{
   max-width:420px;
@@ -27,12 +27,39 @@ body{
   background:#000;
   border-radius:14px;
   overflow:hidden;
+  position:relative;
 }
 video,iframe{
   width:100%;
   height:230px;
   background:#000;
   border-radius:10px;
+}
+.hidden{
+  display:none;
+}
+.glow-btn{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:none;
+  font-weight:700;
+  font-size:18px;
+  position:absolute;
+  bottom:15px;
+  right:15px;
+  cursor:pointer;
+  color:#fff;
+  background:#ff0033;
+  box-shadow:0 0 20px #ff0033,0 0 40px #ff0033;
+  transition:0.3s;
+}
+.glow-btn.green{
+  background:#0f0;
+  box-shadow:0 0 20px #0f0,0 0 40px #0f0;
+}
+.glow-btn:hover{
+  transform:scale(1.1);
 }
 .join{
   margin:20px;
@@ -47,31 +74,6 @@ video,iframe{
   text-decoration:none;
   display:block;
 }
-.input-box{
-  width:90%;
-  margin:10px auto;
-  display:block;
-  padding:12px;
-  border-radius:10px;
-  border:none;
-}
-button{
-  width:90%;
-  margin:0 auto 14px;
-  display:block;
-  padding:12px;
-  border:none;
-  border-radius:50px;
-  background:#00c6ff;
-  font-weight:700;
-  cursor:pointer;
-}
-.btn-match{
-  background:#0f6;
-  color:#000;
-  margin:6px auto;
-  width:80%;
-}
 </style>
 </head>
 
@@ -79,17 +81,13 @@ button{
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- Predefined Matches -->
-<div class="card">
-  <button class="btn-match" onclick="setLink('https://bd-mc-fdlive.fancode.com/mumbai/139299_english_hls_f8962e06b325758_1ta-di_h264/1080p.m3u8')">Wi vs Afg</button>
-  <button class="btn-match" onclick="setLink('')">AUS vs ENG</button>
+<!-- Hidden input -->
+<input id="link" class="hidden" value="https://bd-mc-fdlive.fancode.com/mumbai/139222_english_hls_e5da087ff762368_1ta-di_h264/1080p.m3u8">
+
+<!-- Player -->
+<div class="player-box" id="player">
+  <button class="glow-btn" id="playBtn">▶</button>
 </div>
-
-<!-- Custom Link -->
-<input id="link" class="input-box" placeholder="Paste m3u8 / embed link here">
-<button onclick="play()">PLAY STREAM</button>
-
-<div class="player-box" id="player"></div>
 
 <div class="join">
   🔔 <a href="https://t.me/ClipByNaim" target="_blank">
@@ -99,15 +97,17 @@ button{
 
 <script>
 const playerBox = document.getElementById('player');
+const playBtn = document.getElementById('playBtn');
 
 function loadPlayer(url){
-  playerBox.innerHTML = "";
+  playerBox.innerHTML = ""; // clear player
+  playerBox.appendChild(playBtn); // keep play button
 
   if(url.includes(".m3u8")){
     let video = document.createElement("video");
     video.controls = true;
-    video.playsInline = true;
     video.autoplay = true;
+    video.playsInline = true;
     playerBox.appendChild(video);
 
     if(Hls.isSupported()){
@@ -125,24 +125,15 @@ function loadPlayer(url){
   }
 }
 
-function play(){
+// Play button toggle style
+playBtn.onclick = function(){
   const url = document.getElementById("link").value;
-  if(url) loadPlayer(url);
-}
-
-function setLink(url){
-  document.getElementById("link").value = url;
+  if(!url) return alert("No link found!");
   loadPlayer(url);
-}
-
-// Auto-play via URL ?src=
-window.onload = function(){
-  const params = new URLSearchParams(window.location.search);
-  const src = params.get("src");
-  if(src){
-    document.getElementById("link").value = src;
-    loadPlayer(src);
-  }
+  // Change button color on play
+  this.classList.remove("glow-btn");
+  this.classList.add("glow-btn","green");
+  this.innerText = "▶";
 }
 </script>
 
