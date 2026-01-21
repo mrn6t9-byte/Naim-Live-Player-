@@ -6,62 +6,73 @@
 <title>MN NAIM MULTI LIVE</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
-body{margin:0;font-family:system-ui;background:#010111;color:#fff;}
-.header{text-align:center;padding:14px;font-weight:700;font-size:18px;background:#0b1c3a;}
+body{margin:0;font-family:system-ui;background:#010111;color:#fff;text-align:center;}
+.header{background:#0b1c3a;padding:14px;font-weight:700;font-size:18px;}
+.section{display:none;padding:10px;}
+.btn-match{background:#0f6;color:#000;margin:12px auto;width:80%;display:block;padding:12px;border:none;border-radius:50px;font-weight:700;cursor:pointer;}
+.input-box{width:80%;margin:10px auto;display:block;padding:12px;border-radius:10px;border:none;}
 .player-box{max-width:480px;margin:20px auto;background:#000;border-radius:14px;overflow:hidden;position:relative;}
 video,iframe{width:100%;height:260px;border-radius:10px;background:#000;}
-.hidden{display:none;}
+.match-name{text-align:center;margin-top:12px;font-weight:700;font-size:18px;color:#ffcc00;background:#111;padding:6px 0;border-radius:8px;max-width:300px;margin:auto;}
 .glow-btn{width:60px;height:60px;border-radius:50%;border:none;font-weight:700;font-size:18px;position:absolute;bottom:15px;right:15px;cursor:pointer;color:#fff;background:#ff0033;box-shadow:0 0 20px #ff0033,0 0 40px #ff0033;transition:0.3s;}
 .glow-btn.playing{background:#0f0;box-shadow:0 0 20px #0f0,0 0 40px #0f0;}
 .glow-btn:hover{transform:scale(1.1);}
-.match-name{text-align:center;margin-top:12px;font-weight:700;font-size:18px;color:#ffcc00;background:#111;padding:6px 0;border-radius:8px;max-width:300px;margin-left:auto;margin-right:auto;}
-.btn-match{background:#0f6;color:#000;margin:6px auto;width:80%;display:block;padding:12px;border:none;border-radius:50px;font-weight:700;cursor:pointer;}
 .join{margin:20px;background:linear-gradient(90deg,#1e90ff,#00c6ff);padding:14px;text-align:center;border-radius:12px;font-weight:700;}
 .join a{color:#fff;text-decoration:none;display:block;}
+.hidden{display:none;}
 </style>
 </head>
-
 <body>
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- Predefined Matches -->
-<div class="card" style="text-align:center;">
-  <button class="btn-match" onclick="setMatch('BAN vs IND','https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">Wi W Leage </button>
-  <button class="btn-match" onclick="setMatch('AUS vs ENG','https://bd-mc-fdlive.fancode.com/mumbai/139223_english_hls_abc123/1080p.m3u8')">AUS vs ENG</button>
+<!-- 1️⃣ Index Section -->
+<div id="indexSection" class="section">
+  <h3>Select a Match</h3>
+  <button class="btn-match" onclick="openMatch('Wi W League ','https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">Wi W League</button>
+  <button class="btn-match" onclick="openMatch('AUS vs ENG','https://bd-mc-fdlive.fancode.com/mumbai/139223_english_hls_abc123/1080p.m3u8')">AUS vs ENG</button>
+  <input id="customLink" class="input-box" placeholder="Paste m3u8/embed link here">
+  <input id="customName" class="input-box" placeholder="Custom Match Name">
+  <button class="btn-match" onclick="openCustom()">Play Custom Link</button>
 </div>
 
-<!-- Hidden input for public link -->
-<input id="link" class="hidden">
-
-<!-- Match name display -->
-<div class="match-name" id="matchName">Select a Match</div>
-
-<!-- Player -->
-<div class="player-box" id="player">
-  <button class="glow-btn" id="playBtn">▶</button>
-</div>
-
-<div class="join">
-  🔔 <a href="https://t.me/ClipByNaim" target="_blank">Join Telegram for Live Match Links</a>
+<!-- 2️⃣ Match Section -->
+<div id="matchSection" class="section">
+  <div class="match-name" id="matchName">Loading Match...</div>
+  <div class="player-box" id="player">
+    <button class="glow-btn" id="playBtn">▶</button>
+  </div>
+  <div class="join">
+    🔔 <a href="https://t.me/ClipByNaim" target="_blank">Join Telegram for Live Match Links</a>
+  </div>
+  <input id="link" class="hidden">
 </div>
 
 <script>
+const indexSection = document.getElementById('indexSection');
+const matchSection = document.getElementById('matchSection');
 const playerBox = document.getElementById('player');
 const playBtn = document.getElementById('playBtn');
 const matchName = document.getElementById('matchName');
 
-function loadPlayer(url){
-  playerBox.innerHTML = "";
-  playerBox.appendChild(playBtn);
+function showSection(section){
+  if(section==='index'){
+    indexSection.style.display='block';
+    matchSection.style.display='none';
+  }else{
+    indexSection.style.display='none';
+    matchSection.style.display='block';
+  }
+}
 
+// Load player function
+function loadPlayer(url){
+  playerBox.innerHTML="";
+  playerBox.appendChild(playBtn);
   if(url.includes(".m3u8")){
     let video=document.createElement("video");
-    video.controls=true;
-    video.autoplay=true;
-    video.playsInline=true;
+    video.controls=true; video.autoplay=true; video.playsInline=true;
     playerBox.appendChild(video);
-
     if(Hls.isSupported()){
       let hls=new Hls();
       hls.loadSource(url);
@@ -76,31 +87,48 @@ function loadPlayer(url){
   }
 }
 
-function setMatch(name,url){
-  matchName.innerText=name;
-  document.getElementById('link').value=url;
-  loadPlayer(url);
-  playBtn.classList.add("playing");
-}
-
 // Play button click
-playBtn.onclick=function(){
+playBtn.onclick = function(){
   const url=document.getElementById('link').value;
   if(!url)return alert("No link found!");
   loadPlayer(url);
   playBtn.classList.add("playing");
 }
 
-// Auto-play via URL ?src=
+// Open predefined match
+function openMatch(name,url){
+  showSection('match');
+  matchName.innerText=name;
+  document.getElementById('link').value=url;
+  loadPlayer(url);
+  playBtn.classList.add("playing");
+}
+
+// Open custom link
+function openCustom(){
+  const url=document.getElementById('customLink').value;
+  const name=document.getElementById('customName').value || "Custom Match";
+  if(!url){ alert("Please enter a link!"); return; }
+  showSection('match');
+  matchName.innerText=name;
+  document.getElementById('link').value=url;
+  loadPlayer(url);
+  playBtn.classList.add("playing");
+}
+
+// On page load: check URL ?src=&name= to auto play
 window.onload=function(){
   const params=new URLSearchParams(window.location.search);
   const src=params.get("src");
   const name=params.get("name");
   if(src){
+    showSection('match');
     document.getElementById('link').value=src;
-    matchName.innerText=name || "Live Match";
+    matchName.innerText=name||"Live Match";
     loadPlayer(src);
     playBtn.classList.add("playing");
+  }else{
+    showSection('index');
   }
 }
 </script>
