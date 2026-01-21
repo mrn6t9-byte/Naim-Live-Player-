@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,12 +13,14 @@ body{
   font-family:'Lucida Console', monospace;
   text-align:center;
   color:#fff;
-  background:#001100;
   overflow-x:hidden;
+  background: linear-gradient(135deg, #003300 0%, #330000 100%);
+  background-size:400% 400%;
+  animation:bgAnim 20s ease infinite;
   position:relative;
 }
 
-/* Animated diagonal lines using pseudo element */
+/* Animated diagonal lines overlay */
 body::before{
   content:'';
   position:fixed;
@@ -27,17 +30,24 @@ body::before{
   height:200%;
   background:repeating-linear-gradient(
     45deg,
-    rgba(0,255,0,0.05),
-    rgba(0,255,0,0.05) 1px,
-    rgba(255,0,0,0.05) 2px,
-    rgba(255,0,0,0.05) 3px
+    rgba(0,255,0,0.08),
+    rgba(0,255,0,0.08) 2px,
+    rgba(255,0,0,0.08) 4px,
+    rgba(255,0,0,0.08) 6px
   );
-  animation:moveLines 15s linear infinite;
+  animation:moveLines 10s linear infinite;
   z-index:-1;
 }
+
+@keyframes bgAnim{
+  0%{background-position:0% 0%;}
+  50%{background-position:100% 100%;}
+  100%{background-position:0% 0%;}
+}
+
 @keyframes moveLines{
   0%{transform:translate(0,0);}
-  100%{transform:translate(-50px,-50px);}
+  100%{transform:translate(-100px,-100px);}
 }
 
 /* ===== Header ===== */
@@ -222,7 +232,6 @@ video, iframe{
   <div class="join">
     🔔 <a href="https://t.me/ClipByNaim" target="_blank">Join Telegram for Live Match Links</a>
   </div>
-  <!-- Hidden link -->
   <input id="link" class="hidden">
 </div>
 
@@ -290,7 +299,6 @@ function openCustom(){
   playBtn.classList.add("playing");
 }
 
-// Auto-play via URL
 window.onload=function(){
   const params=new URLSearchParams(window.location.search);
   const src=params.get("src");
