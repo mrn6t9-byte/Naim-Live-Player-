@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MN NAIM MULTI LIVE</title>
+<title>MN NAIM LIVE PLAYER </title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 body{
@@ -59,6 +59,19 @@ video,iframe{
 .glow-btn:hover{
   transform:scale(1.1);
 }
+.match-name{
+  text-align:center;
+  margin-top:12px;
+  font-weight:700;
+  font-size:16px;
+  color:#ffcc00;
+  background:#111;
+  padding:6px 0;
+  border-radius:8px;
+  max-width:300px;
+  margin-left:auto;
+  margin-right:auto;
+}
 .join{
   margin:20px;
   background:linear-gradient(90deg,#1e90ff,#00c6ff);
@@ -79,8 +92,11 @@ video,iframe{
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- Hidden input -->
-<input id="link" class="hidden" value="https://bd-mc-fdlive.fancode.com/mumbai/139222_english_hls_e5da087ff762368_1ta-di_h264/1080p.m3u8">India vs Bharot< 
+<!-- Hidden input for m3u8 link -->
+<input id="link" class="hidden" value="https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8">
+
+<!-- Match name -->
+<div class="match-name" id="matchName">Carabian League Match</div>
 
 <!-- Player -->
 <div class="player-box" id="player">
@@ -96,6 +112,7 @@ video,iframe{
 <script>
 const playerBox = document.getElementById('player');
 const playBtn = document.getElementById('playBtn');
+const matchName = document.getElementById('matchName');
 
 function loadPlayer(url){
   playerBox.innerHTML = ""; // clear previous content
@@ -132,8 +149,11 @@ playBtn.onclick = function(){
   if(!url) return alert("No link found!");
   loadPlayer(url);
 
-  // toggle color
+  // toggle button color
   this.classList.add("playing");
+
+  // Example: update match name dynamically if needed
+  // matchName.innerText = "BAN vs IND";
 }
 </script>
 
