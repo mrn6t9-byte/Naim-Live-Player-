@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MN NAIM LIVE PLAYER </title>
+<title>MN NAIM MULTI LIVE</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 body{
@@ -20,7 +20,7 @@ body{
   padding:14px;
 }
 .player-box{
-  max-width:420px;
+  max-width:480px;
   margin:20px auto;
   background:#000;
   border-radius:14px;
@@ -29,12 +29,9 @@ body{
 }
 video,iframe{
   width:100%;
-  height:230px;
+  height:260px;
   background:#000;
   border-radius:10px;
-}
-.hidden{
-  display:none;
 }
 .glow-btn{
   width:60px;
@@ -63,7 +60,7 @@ video,iframe{
   text-align:center;
   margin-top:12px;
   font-weight:700;
-  font-size:16px;
+  font-size:18px;
   color:#ffcc00;
   background:#111;
   padding:6px 0;
@@ -92,7 +89,7 @@ video,iframe{
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- Hidden input for m3u8 link -->
+<!-- Public link (hidden) -->
 <input id="link" class="hidden" value="https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8">
 
 <!-- Match name -->
@@ -114,6 +111,7 @@ const playerBox = document.getElementById('player');
 const playBtn = document.getElementById('playBtn');
 const matchName = document.getElementById('matchName');
 
+// Load video player
 function loadPlayer(url){
   playerBox.innerHTML = ""; // clear previous content
   playerBox.appendChild(playBtn); // keep play button
@@ -149,10 +147,10 @@ playBtn.onclick = function(){
   if(!url) return alert("No link found!");
   loadPlayer(url);
 
-  // toggle button color
+  // Toggle button glow
   this.classList.add("playing");
 
-  // Example: update match name dynamically if needed
+  // Optionally update match name dynamically
   // matchName.innerText = "BAN vs IND";
 }
 </script>
