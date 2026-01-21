@@ -6,20 +6,128 @@
 <title>MN NAIM MULTI LIVE</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
-body{margin:0;font-family:system-ui;background:#010111;color:#fff;text-align:center;}
-.header{background:#0b1c3a;padding:14px;font-weight:700;font-size:18px;}
+/* ===== Body ===== */
+body{
+  margin:0;
+  font-family:'Courier New', monospace;
+  background: linear-gradient(135deg,#120000,#000000);
+  background-size:400% 400%;
+  animation: bgAnim 20s ease infinite;
+  color:#fff;
+  text-align:center;
+}
+@keyframes bgAnim{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* ===== Header ===== */
+.header{
+  background:#220000;
+  padding:16px;
+  font-weight:700;
+  font-size:22px;
+  letter-spacing:1px;
+  color:#ffcc00;
+  text-shadow:0 0 10px #ff0000;
+}
+
+/* ===== Sections ===== */
 .section{display:none;padding:10px;}
-.btn-match{background:#0f6;color:#000;margin:12px auto;width:80%;display:block;padding:12px;border:none;border-radius:50px;font-weight:700;cursor:pointer;}
-.input-box{width:80%;margin:10px auto;display:block;padding:12px;border-radius:10px;border:none;}
-.player-box{max-width:480px;margin:20px auto;background:#000;border-radius:14px;overflow:hidden;position:relative;}
-video,iframe{width:100%;height:260px;border-radius:10px;background:#000;}
-.match-name{text-align:center;margin-top:12px;font-weight:700;font-size:18px;color:#ffcc00;background:#111;padding:6px 0;border-radius:8px;max-width:300px;margin:auto;}
-.glow-btn{width:60px;height:60px;border-radius:50%;border:none;font-weight:700;font-size:18px;position:absolute;bottom:15px;right:15px;cursor:pointer;color:#fff;background:#ff0033;box-shadow:0 0 20px #ff0033,0 0 40px #ff0033;transition:0.3s;}
-.glow-btn.playing{background:#0f0;box-shadow:0 0 20px #0f0,0 0 40px #0f0;}
+
+/* ===== Match Buttons ===== */
+.btn-match{
+  background:#ff0000;
+  color:#ffcc00;
+  margin:12px auto;
+  width:80%;
+  display:block;
+  padding:14px;
+  border:none;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 0 10px #ff0000,0 0 20px #ffcc00 inset;
+  transition:0.3s;
+}
+.btn-match:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px #ff0000,0 0 25px #ffcc00 inset;
+}
+
+/* ===== Input Boxes ===== */
+.input-box{
+  width:80%;
+  margin:10px auto;
+  display:block;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  background:#220000;
+  color:#ffcc00;
+  font-weight:700;
+  text-align:center;
+}
+
+/* ===== Player ===== */
+.player-box{
+  max-width:480px;
+  margin:20px auto;
+  background:#000;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  border:2px solid #ff0000;
+  box-shadow:0 0 20px #ff0000;
+}
+video,iframe{
+  width:100%;
+  height:260px;
+  border-radius:10px;
+  background:#000;
+}
+
+/* ===== Match Name ===== */
+.match-name{
+  text-align:center;
+  margin-top:12px;
+  font-weight:700;
+  font-size:18px;
+  color:#000;
+  background:#ffcc00;
+  padding:6px 0;
+  border-radius:8px;
+  max-width:300px;
+  margin-left:auto;
+  margin-right:auto;
+  box-shadow:0 0 10px #ff0000,0 0 20px #ffcc00 inset;
+}
+
+/* ===== Play Button ===== */
+.glow-btn{
+  width:60px;height:60px;border-radius:50%;border:none;font-weight:700;font-size:18px;
+  position:absolute;bottom:15px;right:15px;cursor:pointer;
+  color:#fff;background:#ff0000;
+  box-shadow:0 0 20px #ff0000,0 0 40px #ffcc00;
+  transition:0.3s;
+}
+.glow-btn.playing{
+  background:#0f0;
+  box-shadow:0 0 20px #0f0,0 0 40px #0f0;
+}
 .glow-btn:hover{transform:scale(1.1);}
-.join{margin:20px;background:linear-gradient(90deg,#1e90ff,#00c6ff);padding:14px;text-align:center;border-radius:12px;font-weight:700;}
-.join a{color:#fff;text-decoration:none;display:block;}
-.hidden{display:none;}
+
+/* ===== Join Telegram ===== */
+.join{
+  margin:20px;
+  background:linear-gradient(90deg,#ff0000,#ffcc00);
+  padding:14px;
+  text-align:center;
+  border-radius:12px;
+  font-weight:700;
+}
+.join a{color:#000;text-decoration:none;display:block;}
 </style>
 </head>
 <body>
@@ -29,7 +137,7 @@ video,iframe{width:100%;height:260px;border-radius:10px;background:#000;}
 <!-- 1️⃣ Index Section -->
 <div id="indexSection" class="section">
   <h3>Select a Match</h3>
-  <button class="btn-match" onclick="openMatch('Wi W League ','https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">Wi W League</button>
+  <button class="btn-match" onclick="openMatch('BAN vs IND','https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">BAN vs IND</button>
   <button class="btn-match" onclick="openMatch('AUS vs ENG','https://bd-mc-fdlive.fancode.com/mumbai/139223_english_hls_abc123/1080p.m3u8')">AUS vs ENG</button>
   <input id="customLink" class="input-box" placeholder="Paste m3u8/embed link here">
   <input id="customName" class="input-box" placeholder="Custom Match Name">
@@ -65,7 +173,6 @@ function showSection(section){
   }
 }
 
-// Load player function
 function loadPlayer(url){
   playerBox.innerHTML="";
   playerBox.appendChild(playBtn);
@@ -87,7 +194,6 @@ function loadPlayer(url){
   }
 }
 
-// Play button click
 playBtn.onclick = function(){
   const url=document.getElementById('link').value;
   if(!url)return alert("No link found!");
@@ -95,7 +201,6 @@ playBtn.onclick = function(){
   playBtn.classList.add("playing");
 }
 
-// Open predefined match
 function openMatch(name,url){
   showSection('match');
   matchName.innerText=name;
@@ -104,7 +209,6 @@ function openMatch(name,url){
   playBtn.classList.add("playing");
 }
 
-// Open custom link
 function openCustom(){
   const url=document.getElementById('customLink').value;
   const name=document.getElementById('customName').value || "Custom Match";
@@ -116,7 +220,7 @@ function openCustom(){
   playBtn.classList.add("playing");
 }
 
-// On page load: check URL ?src=&name= to auto play
+// Auto-play via URL
 window.onload=function(){
   const params=new URLSearchParams(window.location.search);
   const src=params.get("src");
