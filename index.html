@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MN NAIM MULTI LIVE</title>
-
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
 <style>
 body{
   margin:0;
@@ -54,7 +52,7 @@ video,iframe{
   box-shadow:0 0 20px #ff0033,0 0 40px #ff0033;
   transition:0.3s;
 }
-.glow-btn.green{
+.glow-btn.playing{
   background:#0f0;
   box-shadow:0 0 20px #0f0,0 0 40px #0f0;
 }
@@ -82,7 +80,7 @@ video,iframe{
 <div class="header">MN NAIM MULTI LIVE</div>
 
 <!-- Hidden input -->
-<input id="link" class="hidden" value="https://bd-mc-fdlive.fancode.com/mumbai/139222_english_hls_e5da087ff762368_1ta-di_h264/1080p.m3u8">
+<input id="link" class="hidden" value="https://bd-mc-fdlive.fancode.com/mumbai/139222_english_hls_e5da087ff762368_1ta-di_h264/1080p.m3u8">India vs Bharot< 
 
 <!-- Player -->
 <div class="player-box" id="player">
@@ -100,7 +98,7 @@ const playerBox = document.getElementById('player');
 const playBtn = document.getElementById('playBtn');
 
 function loadPlayer(url){
-  playerBox.innerHTML = ""; // clear player
+  playerBox.innerHTML = ""; // clear previous content
   playerBox.appendChild(playBtn); // keep play button
 
   if(url.includes(".m3u8")){
@@ -114,6 +112,9 @@ function loadPlayer(url){
       let hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
     }else{
       video.src = url;
     }
@@ -125,15 +126,14 @@ function loadPlayer(url){
   }
 }
 
-// Play button toggle style
+// Play button click
 playBtn.onclick = function(){
   const url = document.getElementById("link").value;
   if(!url) return alert("No link found!");
   loadPlayer(url);
-  // Change button color on play
-  this.classList.remove("glow-btn");
-  this.classList.add("glow-btn","green");
-  this.innerText = "▶";
+
+  // toggle color
+  this.classList.add("playing");
 }
 </script>
 
