@@ -3,117 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MN NAIM MULTI LIVE - Dual Player</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>MN NAIM MULTI LIVE</title>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 body{
   margin:0;
+  background:#050505;
+  color:#fff;
   font-family:'Inter',system-ui;
-  background:linear-gradient(180deg,#071b20,#02090c,#000);
-  color:#eaffff;
 }
-
-/* HEADER */
 .header{
   text-align:center;
-  padding:20px;
+  padding:18px;
   font-family:'Orbitron',sans-serif;
-  font-size:28px;
-  color:#38f2e0;
-  text-shadow:0 0 18px #38f2e0;
+  font-size:26px;
+  color:#00f2ff;
+  text-shadow:0 0 15px #00f2ff;
 }
 
-/* MATCH LIST */
-#listPage{
-  max-width:600px;
-  margin:auto;
-  padding:10px;
-}
-.match-btn{
-  width:100%;
-  padding:20px 20px 20px 16px;
-  margin:14px 0;
-  border:none;
-  border-radius:22px;
-  font-size:20px;
-  font-family:'Orbitron',sans-serif;
-  color:#fff;
-  cursor:pointer;
-  background:linear-gradient(90deg,#ff004c,#ffb300,#00e5ff,#ff004c);
-  background-size:300% 300%;
-  animation:rgb 6s linear infinite;
-  box-shadow:0 0 25px rgba(255,255,255,.15);
-  position:relative;
-  text-align:left;
-  overflow:hidden;
-}
-@keyframes rgb{
-  0%{background-position:0% 50%;}
-  100%{background-position:300% 50%;}
-}
-.match-btn:active{transform:scale(.96);}
-
-/* MATCH NAME */
-.match-name{
-  display:block;
-  font-size:18px;
-  font-weight:600;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-/* BADGE */
-.badge{
-  position:absolute;
-  right:16px;
-  top:14px;
-  font-size:12px;
-  padding:4px 10px;
-  border-radius:12px;
-}
-.live{
-  background:#ff0033;
-  box-shadow:0 0 10px #ff0033;
-}
-.upcoming{
-  background:#222;
-  color:#ffcc00;
-}
-.countdown{
-  font-size:13px;
-  margin-left:10px;
-  display:inline-block;
-  vertical-align:middle;
-}
-
-/* PLAYER PAGE */
-#playerPage{
-  display:none;
-  max-width:600px;
-  margin:auto;
-  padding:10px;
-}
-.back{
-  margin:10px;
-  color:#38f2e0;
-  cursor:pointer;
-  font-weight:600;
-}
-
-/* MULTI PLAYER BOX */
-.player-container{
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-}
+/* PLAYER */
 .player-box{
+  max-width:700px;
+  margin:14px auto;
   background:#000;
-  border-radius:26px;
+  border-radius:18px;
   overflow:hidden;
-  box-shadow:0 0 35px #000;
+  box-shadow:0 0 25px rgba(0,255,255,.25);
 }
 video{
   width:100%;
@@ -121,173 +39,129 @@ video{
   background:#000;
 }
 
-/* MATCH TITLE IN PLAYER */
-.match-title{
+/* SECTION TITLES */
+.section-title{
   text-align:center;
+  margin:22px 0 10px;
   font-family:'Orbitron',sans-serif;
-  font-size:22px;
-  margin:10px 0;
-  color:#ffdd00;
+  font-size:20px;
+  color:#ffcc00;
 }
 
-/* CONTROLS */
-.controls{
-  display:flex;
-  gap:10px;
-  padding:12px;
-}
-.ctrl{
-  flex:1;
-  padding:14px;
+/* BUTTONS */
+.btn{
+  width:90%;
+  margin:10px auto;
+  padding:16px;
   border:none;
-  border-radius:16px;
-  font-weight:700;
+  border-radius:18px;
+  font-size:18px;
+  font-family:'Orbitron',sans-serif;
   cursor:pointer;
+  color:#fff;
+  background:linear-gradient(90deg,#ff004c,#ffb300,#00e5ff);
+  background-size:300% 300%;
+  animation:rgb 6s linear infinite;
 }
-.play{background:linear-gradient(90deg,#ff6a00,#38f2e0);color:#fff;}
-.pip{background:#111;color:#38f2e0;}
-.share{background:#0088cc;color:#fff;}
+@keyframes rgb{
+  0%{background-position:0% 50%}
+  100%{background-position:300% 50%}
+}
 
-/* TELEGRAM FLOAT BUTTON */
-.telegram-float{
+/* MULTI */
+.multi-wrap{
+  max-width:700px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+/* TELEGRAM */
+.tg{
   position:fixed;
   bottom:20px;
   right:20px;
   background:linear-gradient(90deg,#0088cc,#00f2ff);
   padding:14px 20px;
-  color:#fff;
+  border-radius:30px;
   font-weight:700;
-  border-radius:26px;
+  color:#fff;
   text-decoration:none;
-  text-align:center;
-  box-shadow:0 0 25px rgba(0,255,255,.5);
-  z-index:9999;
+  box-shadow:0 0 30px rgba(0,255,255,.7);
   animation:pulse 2s infinite;
-  transition:0.3s;
-}
-.telegram-float:hover{
-  box-shadow:0 0 35px rgba(0,255,255,.8);
-  transform:scale(1.05);
 }
 @keyframes pulse{
-  0%{transform:scale(1);box-shadow:0 0 25px rgba(0,255,255,.5);}
-  50%{transform:scale(1.05);box-shadow:0 0 40px rgba(0,255,255,.8);}
-  100%{transform:scale(1);box-shadow:0 0 25px rgba(0,255,255,.5);}
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+  100%{transform:scale(1)}
 }
 </style>
 </head>
 
 <body>
+
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- MATCH LIST -->
-<div id="listPage"></div>
-
-<!-- PLAYER PAGE -->
-<div id="playerPage">
-  <div class="back" onclick="goBack()">← Back</div>
-  <div class="player-container" id="playerContainer"></div>
+<!-- SINGLE MATCH PLAYER -->
+<div class="player-box">
+  <video id="singlePlayer" controls autoplay playsinline></video>
 </div>
 
-<!-- TELEGRAM FLOAT BUTTON -->
-<a href="https://t.me/ClipByNaim" target="_blank" class="telegram-float">Join Telegram</a>
+<!-- SINGLE MATCH SLOTS -->
+<div class="section-title">SINGLE MATCH</div>
+
+<button class="btn" onclick="playSingle(0)">BPL 26 RW vs CTR</button>
+<button class="btn" onclick="playSingle(1)">BAN vs IND</button>
+<button class="btn" onclick="playSingle(2)">PSL QG vs IU</button>
+<button class="btn" onclick="playSingle(3)">ILT20 MIE vs SW</button>
+<button class="btn" onclick="playSingle(4)">BBL ST vs HEA</button>
+
+<!-- MULTI LIVE -->
+<div class="section-title">MULTI LIVE</div>
+
+<div class="multi-wrap">
+  <div class="player-box">
+    <video id="multi1" controls autoplay playsinline></video>
+  </div>
+  <div class="player-box">
+    <video id="multi2" controls autoplay playsinline></video>
+  </div>
+</div>
+
+<button class="btn" onclick="playMulti(0,1)">Play Match 1 + 2</button>
+<button class="btn" onclick="playMulti(2,3)">Play Match 3 + 4</button>
+
+<a class="tg" href="https://t.me/ClipByNaim" target="_blank">Join Telegram</a>
 
 <script>
-let hlsPlayers=[];
-
-/* MATCH DATA */
 const matches=[
- {name:"BPL 26 RW vs CTR", link:"https://example.com/bpl26.m3u8", start:"2026-01-22T18:30:00"},
- {name:"BPL 26 KH vs KH2", link:"https://example.com/bpl26-2.m3u8", start:"2026-01-23T12:00:00"}
+ {name:"BPL 26 RW vs CTR", link:"https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8"},
+ {name:"BAN vs IND", link:"https://example.com/banind.m3u8"},
+ {name:"PSL QG vs IU", link:"https://example.com/psl.m3u8"},
+ {name:"ILT20", link:"https://example.com/ilt20.m3u8"},
+ {name:"BBL", link:"https://example.com/bbl.m3u8"}
 ];
 
-const list=document.getElementById("listPage");
-const playerContainer=document.getElementById("playerContainer");
-
-/* BUILD MATCH BUTTONS */
-matches.forEach((m,index)=>{
-  const btn=document.createElement("button");
-  btn.className="match-btn";
-
-  const nameSpan=document.createElement("span");
-  nameSpan.className="match-name";
-  nameSpan.innerText=m.name;
-  btn.appendChild(nameSpan);
-
-  const countdown=document.createElement("span");
-  countdown.className="countdown";
-  btn.appendChild(countdown);
-
-  btn.onclick=()=>openDualPlayer(m,index);
-  list.appendChild(btn);
-
-  const badge=document.createElement("div");
-  badge.className="badge upcoming";
-  badge.innerText="UPCOMING";
-  btn.appendChild(badge);
-
-  const start=new Date(m.start);
-  setInterval(()=>{
-    const diff=start-new Date();
-    if(diff<=0){
-      badge.className="badge live";
-      badge.innerText="LIVE";
-      countdown.innerText="";
-    }else{
-      const h=Math.floor(diff/36e5);
-      const m2=Math.floor(diff%36e5/6e4);
-      countdown.innerText=`Starts in ${h}h ${m2}m`;
-    }
-  },1000);
-});
-
-/* OPEN PLAYER PAGE WITH DUAL PLAYERS */
-function openDualPlayer(match,index){
-  document.getElementById("listPage").style.display="none";
-  document.getElementById("playerPage").style.display="block";
-
-  playerContainer.innerHTML="";
-  hlsPlayers.forEach(h=>h.destroy());
-  hlsPlayers=[];
-
-  // add selected match
-  [matches[index], matches[index+1]].forEach(m=>{
-    if(!m) return; // in case only one left
-    const title=document.createElement("div");
-    title.className="match-title";
-    title.innerText=m.name;
-
-    const box=document.createElement("div");
-    box.className="player-box";
-
-    const video=document.createElement("video");
-    video.controls=true;
-    video.playsInline=true;
-    video.autoplay=true;
-    box.appendChild(video);
-
-    playerContainer.appendChild(title);
-    playerContainer.appendChild(box);
-
-    if(Hls.isSupported()){
-      const hls=new Hls();
-      hls.loadSource(m.link);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-      hlsPlayers.push(hls);
-    }else{
-      video.src=m.link;
-      video.play();
-    }
-  });
+function load(video,url){
+  if(Hls.isSupported()){
+    const hls=new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+  }else{
+    video.src=url;
+  }
 }
 
-function goBack(){
-  hlsPlayers.forEach(h=>h.destroy());
-  hlsPlayers=[];
-  document.getElementById("playerPage").style.display="none";
-  document.getElementById("listPage").style.display="block";
+function playSingle(i){
+  load(document.getElementById("singlePlayer"),matches[i].link);
+}
+
+function playMulti(a,b){
+  load(document.getElementById("multi1"),matches[a].link);
+  load(document.getElementById("multi2"),matches[b].link);
 }
 </script>
+
 </body>
 </html>
