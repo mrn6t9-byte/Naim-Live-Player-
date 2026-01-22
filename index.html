@@ -33,7 +33,7 @@ body{
 }
 .match-btn{
   width:100%;
-  padding:20px;
+  padding:20px 20px 20px 16px; /* left padding more for name */
   margin:14px 0;
   border:none;
   border-radius:22px;
@@ -46,12 +46,24 @@ body{
   animation:rgb 6s linear infinite;
   box-shadow:0 0 25px rgba(255,255,255,.15);
   position:relative;
+  text-align:left; /* left align text */
+  overflow:hidden;
 }
 @keyframes rgb{
   0%{background-position:0% 50%;}
   100%{background-position:300% 50%;}
 }
 .match-btn:active{transform:scale(.96);}
+
+/* MATCH NAME */
+.match-name{
+  display:block;
+  font-size:18px;
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
 /* BADGE */
 .badge{
@@ -70,10 +82,13 @@ body{
   background:#222;
   color:#ffcc00;
 }
+
+/* COUNTDOWN */
 .countdown{
   font-size:13px;
-  margin-top:6px;
-  opacity:.9;
+  margin-left:10px;
+  display:inline-block;
+  vertical-align:middle;
 }
 
 /* PLAYER PAGE */
@@ -128,7 +143,7 @@ video{
 .pip{background:#111;color:#38f2e0;}
 .share{background:#0088cc;color:#fff;}
 
-/* TELEGRAM FLOAT BUTTON */
+/* TELEGRAM FLOAT BUTTON WITH PULSE ANIMATION */
 .telegram-float{
   position:fixed;
   bottom:20px;
@@ -142,11 +157,18 @@ video{
   text-align:center;
   box-shadow:0 0 25px rgba(0,255,255,.5);
   z-index:9999;
+  animation:pulse 2s infinite;
   transition:0.3s;
 }
 .telegram-float:hover{
   box-shadow:0 0 35px rgba(0,255,255,.8);
   transform:scale(1.05);
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);box-shadow:0 0 25px rgba(0,255,255,.5);}
+  50%{transform:scale(1.05);box-shadow:0 0 40px rgba(0,255,255,.8);}
+  100%{transform:scale(1);box-shadow:0 0 25px rgba(0,255,255,.5);}
 }
 </style>
 </head>
@@ -178,7 +200,7 @@ video{
 let hls;
 const video=document.getElementById("video");
 
-/* MATCH DATA (LIVE + UPCOMING) */
+/* MATCH DATA */
 const matches=[
  {name:"BPL 26 RW vs CTR", link:"https://example.com/bpl26.m3u8", start:"2026-01-22T18:30:00"},
  {name:"BPL 26 KH vs KH2", link:"https://example.com/bpl26-2.m3u8", start:"2026-01-23T12:00:00"},
@@ -192,7 +214,16 @@ const list=document.getElementById("listPage");
 matches.forEach(m=>{
   const btn=document.createElement("button");
   btn.className="match-btn";
-  btn.innerHTML=`${m.name}<div class="countdown"></div>`;
+
+  const nameSpan=document.createElement("span");
+  nameSpan.className="match-name";
+  nameSpan.innerText=m.name;
+  btn.appendChild(nameSpan);
+
+  const countdown=document.createElement("span");
+  countdown.className="countdown";
+  btn.appendChild(countdown);
+
   btn.onclick=()=>openMatch(m.name,m.link);
   list.appendChild(btn);
 
@@ -201,19 +232,17 @@ matches.forEach(m=>{
   badge.innerText="UPCOMING";
   btn.appendChild(badge);
 
-  const cd=btn.querySelector(".countdown");
   const start=new Date(m.start);
-
   setInterval(()=>{
     const diff=start-new Date();
     if(diff<=0){
       badge.className="badge live";
       badge.innerText="LIVE";
-      cd.innerText="";
+      countdown.innerText="";
     }else{
       const h=Math.floor(diff/36e5);
       const m2=Math.floor(diff%36e5/6e4);
-      cd.innerText=`Starts in ${h}h ${m2}m`;
+      countdown.innerText=`Starts in ${h}h ${m2}m`;
     }
   },1000);
 });
