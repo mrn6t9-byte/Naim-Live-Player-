@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MN NAIM MULTI LIVE</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
@@ -16,116 +14,59 @@ body{
   font-family:'Inter',system-ui;
   background:linear-gradient(180deg,#071b20,#02090c,#000);
   color:#eaffff;
-  text-align:center;
 }
 
 /* HEADER */
 .header{
-  padding:22px;
-  font-size:28px;
+  text-align:center;
+  padding:20px;
   font-family:'Orbitron',sans-serif;
-  letter-spacing:1px;
+  font-size:28px;
   color:#38f2e0;
   text-shadow:0 0 18px #38f2e0;
 }
 
 /* MATCH LIST */
-.match-list{
+#listPage{
   max-width:520px;
   margin:auto;
   padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
 }
 .match-btn{
-  padding:18px;
-  border-radius:20px;
+  width:100%;
+  padding:20px;
+  margin:12px 0;
   border:none;
+  border-radius:22px;
   background:linear-gradient(135deg,#0b2d33,#071b20);
-  color:#eaffff;
-  font-family:'Orbitron',sans-serif;
+  color:#fff;
   font-size:20px;
-  font-weight:700;
-  box-shadow:
-    inset 0 0 16px rgba(56,242,224,.25),
-    0 0 25px rgba(0,0,0,.7);
+  font-family:'Orbitron',sans-serif;
+  box-shadow:inset 0 0 16px rgba(56,242,224,.25);
   cursor:pointer;
-  position:relative;
 }
 .match-btn:active{transform:scale(.97);}
 
-/* LIVE BADGE */
-.live{
-  position:absolute;
-  right:14px;
-  top:14px;
-  background:#ff0033;
-  padding:4px 10px;
-  font-size:12px;
-  border-radius:12px;
-  color:#fff;
-  box-shadow:0 0 10px #ff0033;
-}
-
-/* MATCH LINK BOX */
-.link-box{
-  width:88%;
-  margin:18px auto;
-  padding:18px;
-  border-radius:22px;
-  background:rgba(10,40,45,.55);
-  backdrop-filter:blur(10px);
-  box-shadow:
-    inset 0 0 18px rgba(56,242,224,.2),
-    0 0 30px rgba(0,0,0,.8);
-}
-.link-box input{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:16px;
-  background:#020b0e;
-  color:#38f2e0;
-  font-size:16px;
-  outline:none;
-  box-shadow:inset 0 0 14px rgba(56,242,224,.25);
-}
-.link-box input::placeholder{
-  color:#7fded4;
-}
-.link-box input:focus{
-  box-shadow:0 0 18px #38f2e0;
-}
-
-/* CONTROL BUTTONS */
-.btn{
-  width:88%;
-  padding:18px;
-  margin:10px auto;
-  border-radius:22px;
-  border:none;
-  font-size:18px;
-  font-weight:700;
-  cursor:pointer;
-}
-.play{
-  background:linear-gradient(90deg,#ff6a00,#38f2e0);
-  color:#fff;
-}
-.pip{
-  background:#111;
-  color:#38f2e0;
-}
-.share{
-  background:#0088cc;
-  color:#fff;
-}
-
-/* PLAYER */
-.player-box{
+/* PLAYER PAGE */
+#playerPage{
+  display:none;
   max-width:520px;
-  margin:18px auto;
+  margin:auto;
+  padding:10px;
+}
+.back{
+  margin:10px;
+  color:#38f2e0;
+  cursor:pointer;
+  font-weight:600;
+}
+.match-title{
+  text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;
+  margin:10px 0;
+}
+.player-box{
   background:#000;
   border-radius:26px;
   overflow:hidden;
@@ -136,16 +77,22 @@ video{
   height:240px;
   background:#000;
 }
-
-/* JOIN */
-.join{
-  margin:20px;
+.controls{
+  display:flex;
+  gap:10px;
+  padding:12px;
 }
-.join a{
-  color:#38f2e0;
-  text-decoration:none;
+.ctrl{
+  flex:1;
+  padding:14px;
+  border:none;
+  border-radius:16px;
   font-weight:700;
+  cursor:pointer;
 }
+.play{background:linear-gradient(90deg,#ff6a00,#38f2e0);color:#fff;}
+.pip{background:#111;color:#38f2e0;}
+.share{background:#0088cc;color:#fff;}
 </style>
 </head>
 
@@ -153,56 +100,57 @@ video{
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<div class="match-list">
-  <button class="match-btn" onclick="playMatch('https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">
-    CARIBBEAN LEAGUE
-    <div class="live">LIVE</div>
-  </button>
-
-  <button class="match-btn" onclick="playMatch('https://example.com/ban-ind.m3u8')">
-    BAN vs IND
-  </button>
+<!-- MATCH LIST PAGE -->
+<div id="listPage">
+  <button class="match-btn" onclick="openMatch('BAN vs IND','https://example.com/ban-ind.m3u8')">BAN vs IND</button>
+  <button class="match-btn" onclick="openMatch('PAK vs SL','https://example.com/pak-sl.m3u8')">PAK vs SL</button>
+  <button class="match-btn" onclick="openMatch('AUS vs ENG','https://example.com/aus-eng.m3u8')">AUS vs ENG</button>
+  <button class="match-btn" onclick="openMatch('SA vs NZ','https://example.com/sa-nz.m3u8')">SA vs NZ</button>
+  <button class="match-btn" onclick="openMatch('CARIBBEAN LEAGUE','https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">CARIBBEAN LEAGUE</button>
+  <button class="match-btn" onclick="openMatch('DEMO MATCH','https://example.com/demo.m3u8')">DEMO MATCH</button>
 </div>
 
-<!-- MATCH LINK BOX -->
-<div class="link-box">
-  <input id="link" placeholder="Paste match m3u8 / embed link here">
-</div>
+<!-- PLAYER PAGE -->
+<div id="playerPage">
+  <div class="back" onclick="goBack()">← Back to matches</div>
+  <div class="match-title" id="matchName"></div>
 
-<button class="btn play" onclick="play()">▶ PLAY</button>
-<button class="btn pip" onclick="pip()">⧉ PiP MODE</button>
-<button class="btn share" onclick="share()">↗ SHARE</button>
+  <div class="player-box">
+    <video id="video" controls playsinline></video>
+  </div>
 
-<div class="player-box">
-  <video id="video" controls playsinline></video>
-</div>
-
-<div class="join">
-  🔔 <a href="https://t.me/ClipByNaim" target="_blank">Join Telegram</a>
+  <div class="controls">
+    <button class="ctrl play" onclick="video.play()">▶ PLAY</button>
+    <button class="ctrl pip" onclick="pip()">⧉ PiP</button>
+    <button class="ctrl share" onclick="share()">↗ SHARE</button>
+  </div>
 </div>
 
 <script>
 let hls;
 const video=document.getElementById("video");
 
-function playMatch(url){
-  link.value=url;
-  play();
-}
+function openMatch(name,link){
+  document.getElementById("listPage").style.display="none";
+  document.getElementById("playerPage").style.display="block";
+  document.getElementById("matchName").innerText=name;
 
-function play(){
-  const url=link.value;
-  if(!url) return alert("Link দাও");
-  if(hls) hls.destroy();
+  if(hls)hls.destroy();
   if(Hls.isSupported()){
     hls=new Hls();
-    hls.loadSource(url);
+    hls.loadSource(link);
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
   }else{
-    video.src=url;
+    video.src=link;
     video.play();
   }
+}
+
+function goBack(){
+  video.pause();
+  document.getElementById("playerPage").style.display="none";
+  document.getElementById("listPage").style.display="block";
 }
 
 function pip(){
