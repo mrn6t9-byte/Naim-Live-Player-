@@ -4,146 +4,124 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MN NAIM MULTI LIVE</title>
-
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
-body{
-  margin:0;
-  background:#050505;
-  color:#fff;
-  font-family:'Inter',system-ui;
-}
-.header{
-  text-align:center;
-  padding:18px;
-  font-family:'Orbitron',sans-serif;
-  font-size:26px;
-  color:#00f2ff;
-  text-shadow:0 0 15px #00f2ff;
-}
+body{margin:0;font-family:'Inter',system-ui;background:#050505;color:#fff;}
+.header{text-align:center;padding:20px;font-family:'Orbitron',sans-serif;font-size:28px;color:#00f2ff;text-shadow:0 0 15px #00f2ff;}
 
-/* PLAYER */
-.player-box{
-  max-width:700px;
-  margin:14px auto;
-  background:#000;
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(0,255,255,.25);
-}
-video{
-  width:100%;
-  height:240px;
-  background:#000;
-}
+/* PAGE STYLES */
+.page{display:none;}
+#mainPage{display:block;max-width:700px;margin:auto;padding:10px;}
+.section-title{font-family:'Orbitron',sans-serif;font-size:20px;color:#ffcc00;margin:18px 0;text-align:center;}
+.btn{width:90%;margin:10px auto;padding:16px;border:none;border-radius:18px;font-size:18px;font-family:'Orbitron',sans-serif;cursor:pointer;color:#fff;background:linear-gradient(90deg,#ff004c,#ffb300,#00e5ff);background-size:300% 300%;animation:rgb 6s linear infinite;display:block;text-align:left;position:relative;overflow:hidden;}
+@keyframes rgb{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.badge{position:absolute;right:16px;top:14px;font-size:12px;padding:4px 10px;border-radius:12px}
+.live{background:#ff0033;box-shadow:0 0 10px #ff0033;}
+.upcoming{background:#222;color:#ffcc00;}
+.countdown{font-size:13px;margin-left:10px;display:inline-block;vertical-align:middle}
 
-/* SECTION TITLES */
-.section-title{
-  text-align:center;
-  margin:22px 0 10px;
-  font-family:'Orbitron',sans-serif;
-  font-size:20px;
-  color:#ffcc00;
-}
-
-/* BUTTONS */
-.btn{
-  width:90%;
-  margin:10px auto;
-  padding:16px;
-  border:none;
-  border-radius:18px;
-  font-size:18px;
-  font-family:'Orbitron',sans-serif;
-  cursor:pointer;
-  color:#fff;
-  background:linear-gradient(90deg,#ff004c,#ffb300,#00e5ff);
-  background-size:300% 300%;
-  animation:rgb 6s linear infinite;
-}
-@keyframes rgb{
-  0%{background-position:0% 50%}
-  100%{background-position:300% 50%}
-}
-
-/* MULTI */
-.multi-wrap{
-  max-width:700px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:18px;
-}
+/* PLAYER PAGE */
+.player-container{max-width:700px;margin:auto;padding:10px;display:flex;flex-direction:column;gap:24px;}
+.player-box{background:#000;border-radius:18px;overflow:hidden;box-shadow:0 0 25px rgba(0,255,255,.25);}
+video{width:100%;height:240px;background:#000;}
+.match-title{text-align:center;font-family:'Orbitron',sans-serif;font-size:22px;margin:10px 0;color:#ffdd00;}
+.back{margin:10px;color:#00f2ff;cursor:pointer;font-weight:600;}
 
 /* TELEGRAM */
-.tg{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:linear-gradient(90deg,#0088cc,#00f2ff);
-  padding:14px 20px;
-  border-radius:30px;
-  font-weight:700;
-  color:#fff;
-  text-decoration:none;
-  box-shadow:0 0 30px rgba(0,255,255,.7);
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.08)}
-  100%{transform:scale(1)}
-}
+.tg{position:fixed;bottom:20px;right:20px;background:linear-gradient(90deg,#0088cc,#00f2ff);padding:14px 20px;border-radius:30px;font-weight:700;color:#fff;text-decoration:none;box-shadow:0 0 30px rgba(0,255,255,.7);animation:pulse 2s infinite;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
 </style>
 </head>
-
 <body>
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- SINGLE MATCH PLAYER -->
-<div class="player-box">
-  <video id="singlePlayer" controls autoplay playsinline></video>
+<!-- MAIN PAGE -->
+<div id="mainPage" class="page">
+  <div class="section-title">SINGLE MATCH</div>
+  <div id="singleBtns"></div>
+
+  <div class="section-title">MULTI LIVE</div>
+  <div id="multiBtns"></div>
 </div>
 
-<!-- SINGLE MATCH SLOTS -->
-<div class="section-title">SINGLE MATCH</div>
-
-<button class="btn" onclick="playSingle(0)">BPL 26 RW vs CTR</button>
-<button class="btn" onclick="playSingle(1)">BAN vs IND</button>
-<button class="btn" onclick="playSingle(2)">PSL QG vs IU</button>
-<button class="btn" onclick="playSingle(3)">ILT20 MIE vs SW</button>
-<button class="btn" onclick="playSingle(4)">BBL ST vs HEA</button>
-
-<!-- MULTI LIVE -->
-<div class="section-title">MULTI LIVE</div>
-
-<div class="multi-wrap">
-  <div class="player-box">
-    <video id="multi1" controls autoplay playsinline></video>
-  </div>
-  <div class="player-box">
-    <video id="multi2" controls autoplay playsinline></video>
+<!-- PLAYER PAGE -->
+<div id="playerPage" class="page">
+  <div class="back" onclick="goBack()">← Back</div>
+  <div class="match-title" id="singleTitle"></div>
+  <div class="player-container">
+    <div class="player-box"><video id="singlePlayer" controls autoplay playsinline></video></div>
+    <div class="player-box"><video id="multi1" controls autoplay playsinline></video></div>
+    <div class="player-box"><video id="multi2" controls autoplay playsinline></video></div>
   </div>
 </div>
-
-<button class="btn" onclick="playMulti(0,1)">Play Match 1 + 2</button>
-<button class="btn" onclick="playMulti(2,3)">Play Match 3 + 4</button>
 
 <a class="tg" href="https://t.me/ClipByNaim" target="_blank">Join Telegram</a>
 
 <script>
 const matches=[
- {name:"BPL 26 RW vs CTR", link:"https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8"},
- {name:"BAN vs IND", link:"https://example.com/banind.m3u8"},
- {name:"PSL QG vs IU", link:"https://example.com/psl.m3u8"},
- {name:"ILT20", link:"https://example.com/ilt20.m3u8"},
- {name:"BBL", link:"https://example.com/bbl.m3u8"}
+  {name:"BPL 26 RW vs CTR", link:"https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8", type:"single", start:"2026-01-22T18:30:00"},
+  {name:"BAN vs IND", link:"https://example.com/banind.m3u8", type:"single", start:"2026-01-22T20:30:00"},
+  {name:"PSL QG vs IU", link:"https://example.com/psl.m3u8", type:"multi", start:"2026-01-23T12:00:00"},
+  {name:"ILT20 MIE vs SW", link:"https://example.com/ilt20.m3u8", type:"multi", start:"2026-01-23T15:00:00"}
 ];
 
+// Build buttons
+const singleBtns=document.getElementById("singleBtns");
+const multiBtns=document.getElementById("multiBtns");
+matches.forEach((m,i)=>{
+  const btn=document.createElement("button");
+  btn.className="btn";
+  btn.innerText=m.name;
+
+  // badge
+  const badge=document.createElement("span");
+  badge.className="badge upcoming";
+  badge.innerText="UPCOMING";
+  btn.appendChild(badge);
+
+  // countdown
+  const countdown=document.createElement("span");
+  countdown.className="countdown";
+  btn.appendChild(countdown);
+
+  const start=new Date(m.start);
+  setInterval(()=>{
+    const diff=start-new Date();
+    if(diff<=0){
+      badge.className="badge live";
+      badge.innerText="LIVE";
+      countdown.innerText="";
+    }else{
+      const h=Math.floor(diff/36e5);
+      const m2=Math.floor(diff%36e5/6e4);
+      countdown.innerText=`Starts in ${h}h ${m2}m`;
+    }
+  },1000);
+
+  btn.onclick=()=>{
+    document.getElementById("mainPage").style.display="none";
+    document.getElementById("playerPage").style.display="block";
+    document.getElementById("singleTitle").innerText=m.name;
+
+    load(document.getElementById("singlePlayer"),m.link);
+    // load multi only for type multi
+    if(m.type==="multi"){
+      load(document.getElementById("multi1"),matches[i].link);
+      if(matches[i+1] && matches[i+1].type==="multi") load(document.getElementById("multi2"),matches[i+1].link);
+    }else{
+      document.getElementById("multi1").src="";
+      document.getElementById("multi2").src="";
+    }
+  }
+
+  if(m.type==="single") singleBtns.appendChild(btn);
+  else multiBtns.appendChild(btn);
+});
+
 function load(video,url){
+  if(!url) return;
   if(Hls.isSupported()){
     const hls=new Hls();
     hls.loadSource(url);
@@ -153,13 +131,12 @@ function load(video,url){
   }
 }
 
-function playSingle(i){
-  load(document.getElementById("singlePlayer"),matches[i].link);
-}
-
-function playMulti(a,b){
-  load(document.getElementById("multi1"),matches[a].link);
-  load(document.getElementById("multi2"),matches[b].link);
+function goBack(){
+  document.getElementById("playerPage").style.display="none";
+  document.getElementById("mainPage").style.display="block";
+  document.getElementById("singlePlayer").src="";
+  document.getElementById("multi1").src="";
+  document.getElementById("multi2").src="";
 }
 </script>
 
