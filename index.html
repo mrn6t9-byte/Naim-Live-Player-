@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MN NAIM MULTI LIVE</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -42,13 +41,7 @@ body{
   font-family:'Orbitron',sans-serif;
   color:#fff;
   cursor:pointer;
-  background:linear-gradient(
-    90deg,
-    #ff004c,
-    #ffb300,
-    #00e5ff,
-    #ff004c
-  );
+  background:linear-gradient(90deg,#ff004c,#ffb300,#00e5ff,#ff004c);
   background-size:300% 300%;
   animation:rgb 6s linear infinite;
   box-shadow:0 0 25px rgba(255,255,255,.15);
@@ -77,8 +70,6 @@ body{
   background:#222;
   color:#ffcc00;
 }
-
-/* COUNTDOWN */
 .countdown{
   font-size:13px;
   margin-top:6px;
@@ -104,8 +95,6 @@ body{
   font-size:22px;
   margin:10px 0;
 }
-
-/* PLAYER */
 .player-box{
   background:#000;
   border-radius:26px;
@@ -132,37 +121,52 @@ video{
   font-weight:700;
   cursor:pointer;
 }
-.play{
-  background:linear-gradient(90deg,#ff6a00,#38f2e0);
+.play{background:linear-gradient(90deg,#ff6a00,#38f2e0);color:#fff;}
+.pip{background:#111;color:#38f2e0;}
+.share{background:#0088cc;color:#fff;}
+
+/* TELEGRAM FLOAT BUTTON */
+.telegram-float{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:linear-gradient(90deg,#0088cc,#00f2ff);
+  padding:14px 20px;
   color:#fff;
+  font-weight:700;
+  border-radius:26px;
+  text-decoration:none;
+  text-align:center;
+  box-shadow:0 0 25px rgba(0,255,255,.5);
+  z-index:9999;
+  transition:0.3s;
 }
-.pip{
-  background:#111;
-  color:#38f2e0;
-}
-.share{
-  background:#0088cc;
-  color:#fff;
+.telegram-float:hover{
+  box-shadow:0 0 35px rgba(0,255,255,.8);
+  transform:scale(1.05);
 }
 </style>
 </head>
 
 <body>
-
 <div class="header">MN NAIM MULTI LIVE</div>
 
 <!-- MATCH LIST -->
-<div id="listPage"></div>
+<div id="listPage">
+  <button class="match-btn" onclick="openMatch('BAN vs IND','https://example.com/ban-ind.m3u8')">BAN vs IND</button>
+  <button class="match-btn" onclick="openMatch('PAK vs SL','https://example.com/pak-sl.m3u8')">PAK vs SL</button>
+  <button class="match-btn" onclick="openMatch('AUS vs ENG','https://example.com/aus-eng.m3u8')">AUS vs ENG</button>
+  <button class="match-btn" onclick="openMatch('SA vs NZ','https://example.com/sa-nz.m3u8')">SA vs NZ</button>
+  <button class="match-btn" onclick="openMatch('CARIBBEAN LEAGUE','https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8')">CARIBBEAN LEAGUE</button>
+</div>
 
 <!-- PLAYER PAGE -->
 <div id="playerPage">
   <div class="back" onclick="goBack()">← Back</div>
   <div class="match-title" id="matchName"></div>
-
   <div class="player-box">
     <video id="video" controls playsinline></video>
   </div>
-
   <div class="controls">
     <button class="ctrl play" onclick="video.play()">▶ PLAY</button>
     <button class="ctrl pip" onclick="pip()">⧉ PiP</button>
@@ -170,69 +174,10 @@ video{
   </div>
 </div>
 
+<!-- TELEGRAM FLOAT BUTTON -->
+<a href="https://t.me/ClipByNaim" target="_blank" class="telegram-float">Join Telegram</a>
+
 <script>
-/* MATCH DATA (JSON) */
-const matches=[
- {
-  name:"BAN vs IND",
-  link:"https://example.com/ban-ind.m3u8",
-  start:"2026-01-22T18:30:00"
- },
- {
-  name:"PAK vs SL",
-  link:"https://example.com/pak-sl.m3u8",
-  start:"2026-01-22T15:00:00"
- },
- {
-  name:"AUS vs ENG",
-  link:"https://example.com/aus-eng.m3u8",
-  start:"2026-01-22T00:00:00"
- },
- {
-  name:"SA vs NZ",
-  link:"https://example.com/sa-nz.m3u8",
-  start:"2026-01-23T12:00:00"
- },
- {
-  name:"CARIBBEAN LEAGUE",
-  link:"https://bd-mc-fdlive.fancode.com/mumbai/139758_english_hls_add0a4c6f92142_1ta-di_h264/1080p.m3u8",
-  start:"2026-01-22T00:00:00"
- }
-];
-
-const list=document.getElementById("listPage");
-
-/* BUILD MATCH BUTTONS */
-matches.forEach(m=>{
-  const btn=document.createElement("button");
-  btn.className="match-btn";
-  btn.innerHTML=`${m.name}<div class="countdown"></div>`;
-  btn.onclick=()=>openMatch(m.name,m.link);
-  list.appendChild(btn);
-
-  const badge=document.createElement("div");
-  badge.className="badge upcoming";
-  badge.innerText="UPCOMING";
-  btn.appendChild(badge);
-
-  const cd=btn.querySelector(".countdown");
-  const start=new Date(m.start);
-
-  setInterval(()=>{
-    const diff=start-new Date();
-    if(diff<=0){
-      badge.className="badge live";
-      badge.innerText="LIVE";
-      cd.innerText="";
-    }else{
-      const h=Math.floor(diff/36e5);
-      const m2=Math.floor(diff%36e5/6e4);
-      cd.innerText=`Starts in ${h}h ${m2}m`;
-    }
-  },1000);
-});
-
-/* PLAYER */
 let hls;
 const video=document.getElementById("video");
 
@@ -272,6 +217,5 @@ function share(){
   navigator.share ? navigator.share({text}) : alert(text);
 }
 </script>
-
 </body>
 </html>
