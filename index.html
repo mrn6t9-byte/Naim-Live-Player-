@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MN NAIM MULTI LIVE</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -14,8 +15,6 @@ body{
   background:linear-gradient(180deg,#071b20,#02090c,#000);
   color:#eaffff;
 }
-
-/* HEADER */
 .header{
   text-align:center;
   padding:20px;
@@ -24,48 +23,28 @@ body{
   color:#38f2e0;
   text-shadow:0 0 18px #38f2e0;
 }
-
-/* MATCH LIST */
-#listPage{
-  max-width:520px;
-  margin:auto;
-  padding:10px;
-}
+#listPage,#playerPage{max-width:520px;margin:auto;padding:10px;}
 .match-btn{
   width:100%;
-  padding:20px 20px 20px 16px; /* left padding more for name */
+  padding:20px;
   margin:14px 0;
   border:none;
   border-radius:22px;
-  font-size:20px;
   font-family:'Orbitron',sans-serif;
+  font-size:18px;
   color:#fff;
+  text-align:left;
   cursor:pointer;
   background:linear-gradient(90deg,#ff004c,#ffb300,#00e5ff,#ff004c);
   background-size:300% 300%;
   animation:rgb 6s linear infinite;
-  box-shadow:0 0 25px rgba(255,255,255,.15);
   position:relative;
-  text-align:left; /* left align text */
-  overflow:hidden;
 }
 @keyframes rgb{
   0%{background-position:0% 50%;}
   100%{background-position:300% 50%;}
 }
-.match-btn:active{transform:scale(.96);}
-
-/* MATCH NAME */
-.match-name{
-  display:block;
-  font-size:18px;
-  font-weight:600;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-/* BADGE */
+.match-name{display:block;font-size:19px;}
 .badge{
   position:absolute;
   right:16px;
@@ -74,36 +53,11 @@ body{
   padding:4px 10px;
   border-radius:12px;
 }
-.live{
-  background:#ff0033;
-  box-shadow:0 0 10px #ff0033;
-}
-.upcoming{
-  background:#222;
-  color:#ffcc00;
-}
+.live{background:#ff0033;}
+.upcoming{background:#222;color:#ffcc00;}
 
-/* COUNTDOWN */
-.countdown{
-  font-size:13px;
-  margin-left:10px;
-  display:inline-block;
-  vertical-align:middle;
-}
-
-/* PLAYER PAGE */
-#playerPage{
-  display:none;
-  max-width:520px;
-  margin:auto;
-  padding:10px;
-}
-.back{
-  margin:10px;
-  color:#38f2e0;
-  cursor:pointer;
-  font-weight:600;
-}
+#playerPage{display:none;}
+.back{color:#38f2e0;margin:10px 0;cursor:pointer;}
 .match-title{
   text-align:center;
   font-family:'Orbitron',sans-serif;
@@ -111,39 +65,25 @@ body{
   margin:10px 0;
   color:#ffdd00;
 }
-
-/* PLAYER */
 .player-box{
   background:#000;
   border-radius:26px;
   overflow:hidden;
-  box-shadow:0 0 35px #000;
 }
-video{
-  width:100%;
-  height:240px;
-  background:#000;
-}
+video{width:100%;height:240px;}
 
-/* CONTROLS */
-.controls{
-  display:flex;
-  gap:10px;
-  padding:12px;
-}
+.controls{display:flex;gap:10px;padding:12px;}
 .ctrl{
   flex:1;
   padding:14px;
   border:none;
   border-radius:16px;
   font-weight:700;
-  cursor:pointer;
 }
 .play{background:linear-gradient(90deg,#ff6a00,#38f2e0);color:#fff;}
 .pip{background:#111;color:#38f2e0;}
 .share{background:#0088cc;color:#fff;}
 
-/* TELEGRAM FLOAT BUTTON WITH PULSE ANIMATION */
 .telegram-float{
   position:fixed;
   bottom:20px;
@@ -154,26 +94,18 @@ video{
   font-weight:700;
   border-radius:26px;
   text-decoration:none;
-  text-align:center;
-  box-shadow:0 0 25px rgba(0,255,255,.5);
-  z-index:9999;
   animation:pulse 2s infinite;
-  transition:0.3s;
 }
-.telegram-float:hover{
-  box-shadow:0 0 35px rgba(0,255,255,.8);
-  transform:scale(1.05);
-}
-
 @keyframes pulse{
-  0%{transform:scale(1);box-shadow:0 0 25px rgba(0,255,255,.5);}
-  50%{transform:scale(1.05);box-shadow:0 0 40px rgba(0,255,255,.8);}
-  100%{transform:scale(1);box-shadow:0 0 25px rgba(0,255,255,.5);}
+  0%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+  100%{transform:scale(1);}
 }
 </style>
 </head>
 
 <body>
+
 <div class="header">MN NAIM MULTI LIVE</div>
 
 <!-- MATCH LIST -->
@@ -182,7 +114,7 @@ video{
 <!-- PLAYER PAGE -->
 <div id="playerPage">
   <div class="back" onclick="goBack()">← Back</div>
-  <div class="match-title" id="matchName"></div>
+  <div class="match-title" id="matchTitle"></div>
   <div class="player-box">
     <video id="video" controls playsinline></video>
   </div>
@@ -193,95 +125,71 @@ video{
   </div>
 </div>
 
-<!-- TELEGRAM FLOAT BUTTON -->
-<a href="https://t.me/ClipByNaim" target="_blank" class="telegram-float">Join Telegram</a>
+<a class="telegram-float" href="https://t.me/ClipByNaim" target="_blank">Join Telegram</a>
 
 <script>
 let hls;
 const video=document.getElementById("video");
 
-/* MATCH DATA */
+/* 🔥 10 MATCH NAME READY (just add link later) */
 const matches=[
- {name:" T Sports BD ", link:"https://padmaonline.duckdns.org:8088/T-SportHD/index.m3u8", start:"2026-01-22T15:00:00"},
- {name:"Nz Super Smash ", link:"https://bd-mc-fdlive.fancode.com/mumbai/138759_english_hls_c2d380057a91084_1ta-di_h264/1080p.m3u8", start:"2026-01-25T:30:00"},
- {name:" FOX 501 ", link:"https://allinonereborn.xyz/vip/live.php?id=89860", start:"2026-01-22T14:30:00"},
- {name:"Sky Cricket ", link:"https://allinonereborn.xyz/vip/live.php?id=1084880", start:"2026-01-24T14:45:00"}];
+ {name:"BPL 2026 – RW vs CTR", link:""},
+ {name:"BAN vs IND – 1st ODI", link:""},
+ {name:"PSL – LQ vs KK", link:""},
+ {name:"IPL – CSK vs MI", link:""},
+ {name:"BPL 26 – COV vs SYL", link:""},
+ {name:"AUS vs ENG – Test Match", link:""},
+ {name:"SA vs NZ – T20I", link:""},
+ {name:"PAK vs WI – ODI", link:""},
+ {name:"Asia Cup – IND vs PAK", link:""},
+ {name:"CPL – TKR vs GAW", link:""}
+];
 
-const list=document.getElementById("listPage");
+const listPage=document.getElementById("listPage");
 
-/* BUILD MATCH BUTTONS */
 matches.forEach(m=>{
   const btn=document.createElement("button");
   btn.className="match-btn";
-
-  const nameSpan=document.createElement("span");
-  nameSpan.className="match-name";
-  nameSpan.innerText=m.name;
-  btn.appendChild(nameSpan);
-
-  const countdown=document.createElement("span");
-  countdown.className="countdown";
-  btn.appendChild(countdown);
-
-  btn.onclick=()=>openMatch(m.name,m.link);
-  list.appendChild(btn);
-
+  btn.innerHTML=`<span class="match-name">${m.name}</span>`;
   const badge=document.createElement("div");
-  badge.className="badge upcoming";
-  badge.innerText="UPCOMING";
+  badge.className="badge live";
+  badge.innerText="LIVE";
   btn.appendChild(badge);
-
-  const start=new Date(m.start);
-  setInterval(()=>{
-    const diff=start-new Date();
-    if(diff<=0){
-      badge.className="badge live";
-      badge.innerText="LIVE";
-      countdown.innerText="";
-    }else{
-      const h=Math.floor(diff/36e5);
-      const m2=Math.floor(diff%36e5/6e4);
-      countdown.innerText=`Starts in ${h}h ${m2}m`;
-    }
-  },1000);
+  btn.onclick=()=>openMatch(m.name,m.link);
+  listPage.appendChild(btn);
 });
 
-/* PLAYER */
 function openMatch(name,link){
-  document.getElementById("listPage").style.display="none";
-  document.getElementById("playerPage").style.display="block";
-  document.getElementById("matchName").innerText=name;
+  listPage.style.display="none";
+  playerPage.style.display="block";
+  matchTitle.innerText=name;
 
   if(hls)hls.destroy();
-  if(Hls.isSupported()){
+  if(link && Hls.isSupported()){
     hls=new Hls();
     hls.loadSource(link);
     hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
   }else{
     video.src=link;
-    video.play();
   }
 }
 
 function goBack(){
   video.pause();
-  document.getElementById("playerPage").style.display="none";
-  document.getElementById("listPage").style.display="block";
+  playerPage.style.display="none";
+  listPage.style.display="block";
 }
 
 function pip(){
-  if(document.pictureInPictureElement){
-    document.exitPictureInPicture();
-  }else{
-    video.requestPictureInPicture();
-  }
+  document.pictureInPictureElement
+   ? document.exitPictureInPicture()
+   : video.requestPictureInPicture();
 }
 
 function share(){
-  const text="🔴 LIVE MATCH WATCH NOW\nJoin 👉 https://t.me/ClipByNaim";
-  navigator.share ? navigator.share({text}) : alert(text);
+  navigator.share({text:"🔴 Live Match ▶ https://t.me/ClipByNaim"});
 }
 </script>
+
 </body>
 </html>
