@@ -55,7 +55,13 @@ body{
 }
 .live{background:#ff0033;}
 .upcoming{background:#222;color:#ffcc00;}
+.countdown{
+  font-size:13px;
+  margin-top:4px;
+  display:block;
+}
 
+/* PLAYER */
 #playerPage{display:none;}
 .back{color:#38f2e0;margin:10px 0;cursor:pointer;}
 .match-title{
@@ -71,7 +77,6 @@ body{
   overflow:hidden;
 }
 video{width:100%;height:240px;}
-
 .controls{display:flex;gap:10px;padding:12px;}
 .ctrl{
   flex:1;
@@ -103,15 +108,12 @@ video{width:100%;height:240px;}
 }
 </style>
 </head>
-
 <body>
 
 <div class="header">MN NAIM MULTI LIVE</div>
 
-<!-- MATCH LIST -->
 <div id="listPage"></div>
 
-<!-- PLAYER PAGE -->
 <div id="playerPage">
   <div class="back" onclick="goBack()">← Back</div>
   <div class="match-title" id="matchTitle"></div>
@@ -131,40 +133,65 @@ video{width:100%;height:240px;}
 let hls;
 const video=document.getElementById("video");
 
-/* 🔥 10 MATCH NAME READY (just add link later) */
+/* 🔥 10 MATCHES WITH TIME */
 const matches=[
- {name:"3rd Odi SL vs Eng TNT ", link:"https://allinonereborn.xyz/vip/live.php?id=1084873"},
- {name:"BAN vs IND – 1st ODI", link:""},
- {name:"PSL – LQ vs KK", link:""},
- {name:"IPL – CSK vs MI", link:""},
- {name:"BPL 26 – COV vs SYL", link:""},
- {name:"AUS vs ENG – Test Match", link:""},
- {name:"SA vs NZ – T20I", link:""},
- {name:"PAK vs WI – ODI", link:""},
- {name:"Asia Cup – IND vs PAK", link:""},
- {name:"CPL – TKR vs GAW", link:""}
+ {name:"SL VS ENG TNT SPORTS 1", link:"https://allinonereborn.xyz/vip/live.php?id=1084873", start:"2026-01-27T14:30:00"},
+ {name:"BAN vs IND – 1st ODI", link:"", start:"2026-01-22T18:00:00"},
+ {name:"PSL – LQ vs KK", link:"", start:"2026-01-22T20:00:00"},
+ {name:"IPL – CSK vs MI", link:"", start:"2026-01-23T20:00:00"},
+ {name:"BPL 26 – COV vs SYL", link:"", start:"2026-01-23T15:00:00"},
+ {name:"AUS vs ENG – Test Match", link:"", start:"2026-01-24T09:30:00"},
+ {name:"SA vs NZ – T20I", link:"", start:"2026-01-24T18:00:00"},
+ {name:"PAK vs WI – ODI", link:"", start:"2026-01-24T15:30:00"},
+ {name:"Asia Cup – IND vs PAK", link:"", start:"2026-01-27T20:00:00"},
+ {name:"CPL – TKR vs GAW", link:"", start:"2026-01-26T20:00:00"}
 ];
 
 const listPage=document.getElementById("listPage");
 
+/* BUILD MATCH BUTTONS WITH COUNTDOWN */
 matches.forEach(m=>{
   const btn=document.createElement("button");
   btn.className="match-btn";
-  btn.innerHTML=`<span class="match-name">${m.name}</span>`;
+  const nameSpan=document.createElement("span");
+  nameSpan.className="match-name";
+  nameSpan.innerText=m.name;
+  btn.appendChild(nameSpan);
+
+  const countdown=document.createElement("span");
+  countdown.className="countdown";
+  btn.appendChild(countdown);
+
   const badge=document.createElement("div");
-  badge.className="badge live";
-  badge.innerText="LIVE";
+  badge.className="badge upcoming";
+  badge.innerText="UPCOMING";
   btn.appendChild(badge);
+
+  const startTime=new Date(m.start);
+  setInterval(()=>{
+    const diff=startTime-new Date();
+    if(diff<=0){
+      badge.className="badge live";
+      badge.innerText="LIVE";
+      countdown.innerText="";
+    }else{
+      const h=Math.floor(diff/36e5);
+      const m2=Math.floor(diff%36e5/6e4);
+      countdown.innerText=`Starts in ${h}h ${m2}m`;
+    }
+  },1000);
+
   btn.onclick=()=>openMatch(m.name,m.link);
   listPage.appendChild(btn);
 });
 
+/* PLAYER */
 function openMatch(name,link){
   listPage.style.display="none";
   playerPage.style.display="block";
   matchTitle.innerText=name;
 
-  if(hls)hls.destroy();
+  if(hls) hls.destroy();
   if(link && Hls.isSupported()){
     hls=new Hls();
     hls.loadSource(link);
