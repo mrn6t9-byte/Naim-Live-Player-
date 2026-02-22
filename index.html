@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MN X NAIM LIVE 🔴</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
-
 <style>
 body{margin:0;background:#02090c;color:#fff;font-family:'Inter',sans-serif;}
 .header{text-align:center;padding:22px;font-size:28px;font-weight:800;color:#ffdd00;text-shadow:0 0 20px #ffdd00;}
@@ -32,7 +30,7 @@ video{width:100%;height:280px;background:#000;border-radius:18px;}
 .pip{background:#111;color:#00ffd5;}
 .share{background:#0088cc;color:#fff;}
 .resolution-select{width:100%;margin-top:8px;padding:8px;border-radius:8px;display:none;}
-#popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:1000;}
+#popup{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;display:none;}
 .popup-box{background:#111;padding:25px;border-radius:20px;text-align:center;box-shadow:0 0 30px #00ffe7;}
 .popup-box button{margin:10px;padding:10px 20px;border:none;border-radius:12px;font-weight:800;cursor:pointer;}
 .join{background:#0088cc;color:#fff;}
@@ -74,15 +72,14 @@ video{width:100%;height:280px;background:#000;border-radius:18px;}
 </div>
 
 <script>
-let hls=null;
 let shakaPlayer=null;
 const video=document.getElementById("video");
-const resolutionSelect=document.getElementById("resolution");
 const matchesDiv=document.getElementById("matches");
 const playerTitle=document.getElementById("playerTitle");
 const sources=document.getElementById("sources");
 const popup=document.getElementById("popup");
 
+// ---------------- MATCH DATA ----------------
 const matches=[
 {
  title:"PAK vs NED",
@@ -91,7 +88,7 @@ const matches=[
  right:"https://flagcdn.com/nl.svg",
  start:"2026-02-07T11:30:00",
  sources:[
-  {name:"Demo Stream",link:"https://sonydaimenew.akamaized.net/hls/live/2094588/DAI04-criclive/std_lrh-800300010.m3u8?hdnea=exp=1771786949~acl=/*~id=25680158968644833773616962758777~hmac=94091ad543bb734f7c28ba7a1bb19dfd30f4101821703ad5f625a49ae53488fb"},
+  {name:"Demo Stream",link:"http://spr1.packetcdn.me:2800/8ff02c8d28529a5dbdb5bf3f20c365044b64af718c39015e2e6e07950ea2b6a5/tracks-v1a1/mono.m3u8?token=a36b5bab553f600470299b2881b0d055867c8a02874807c7f7b84ff6a25ae3b2f936b0d305f10766fbd897f5653969280db6d55ec70864c8dcfa1ccb462d6bede927c439c3-c9fb52c631e8753f4e9a0255cbe97035"},
   {name:"Sky Sports MainEvent UHD",link:"https://allinonereborn.xyz/mix.m3u8/live2ff.php?id=10518"},
   {name:"STAR Sports 1 Hindi",link:"https://allinonereborn.xyz/iptv-web/live.php?id=57823"},
   {name:"Willow",link:"https://allinonereborn.xyz/iptv-web/live.php?id=52484"}
@@ -105,7 +102,7 @@ const matches=[
  start:"2026-02-07T15:30:00",
  sources:[
   {name:"Demo Stream",link:"https://mrn6t9-byte.github.io/NAIM-X-LIVE/demo.m3u8"},
-  {name:"Sky Nz 1",link:"https://allinonereborn.xyz/push4k/live256.php?id=23557"},
+  {name:"Sky NZ 1",link:"https://allinonereborn.xyz/push4k/live256.php?id=23557"},
   {name:"Willow Sports",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276740"},
   {name:"HOTSTR HINDI WORLDWIDE",link:"https://aps32.playlist.live-video.net/v1/playlist/..."}
  ]
@@ -130,7 +127,7 @@ const matches=[
  right:"https://flagcdn.com/w80/nz.png",
  start:"2026-01-31T19:30:00",
  sources:[
-  {name:"Demo Stream",link:"https://mrn6t9-byte.github.io/NAIM-X-LIVE/demo.m3u8"},
+  {name:"HotSTR Worldwide",link:"https://mrn6t9-byte.github.io/NAIM-X-LIVE/demo.m3u8"},
   {name:"Cricbuzz 1",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=303629"},
   {name:"TNT Sports 3",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=309617"},
   {name:"Willow",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276740"}
@@ -143,7 +140,7 @@ const matches=[
  right:"https://flagcdn.com/w80/gb.png",
  start:"2026-02-01T19:30:00",
  sources:[
-  {name:"Demo Stream",link:"https://mrn6t9-byte.github.io/NAIM-X-LIVE/demo.m3u8"},
+  {name:"FOX 501",link:"https://mrn6t9-byte.github.io/NAIM-X-LIVE/demo.m3u8"},
   {name:"Sky Sports Cricket",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=10527"},
   {name:"TNT Sports 1",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=309615"},
   {name:"Willow",link:"https://allinonereborn.xyz/mix.m3u8/live4.php?id=276740"}
@@ -151,7 +148,7 @@ const matches=[
 }
 ];
 
-// ---------------- Render Matches ----------------
+// ---------------- CREATE MATCH CARDS ----------------
 matches.forEach(m=>{
   const card=document.createElement("div");
   card.className="match-card";
@@ -173,50 +170,77 @@ matches.forEach(m=>{
 
   setInterval(()=>{
     const diff=start-new Date();
-    if(diff<=0){ timerEl.innerText="LIVE"; liveEl.style.display="block"; }
-    else{
-      const h=Math.floor(diff/36e5), mi=Math.floor((diff%36e5)/6e4), s=Math.floor((diff%6e4)/1000);
-      timerEl.innerText=`${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(diff<=0){
+      timerEl.innerText="LIVE";
+      liveEl.style.display="block";
+    }else{
+      const h=Math.floor(diff/36e5);
+      const mi=Math.floor((diff%36e5)/6e4);
+      const s=Math.floor((diff%6e4)/1000);
+      timerEl.innerText=String(h).padStart(2,'0')+":"+String(mi).padStart(2,'0')+":"+String(s).padStart(2,'0');
     }
   },1000);
 
-  card.onclick=()=>openMatch(m);
+  card.onclick=()=>{
+    popup.style.display="flex";
+    openMatch(m);
+  }
 });
 
-// ---------------- Player Functions ----------------
-function openMatch(m){
+// ---------------- OPEN MATCH ----------------
+async function openMatch(m){
   document.getElementById("matches").style.display="none";
   document.getElementById("playerPage").style.display="block";
   playerTitle.innerText=m.title+" • "+m.sub;
   sources.innerHTML="";
-  resolutionSelect.style.display="none";
+
+  if(shakaPlayer) await shakaPlayer.destroy();
+  shakaPlayer=new shaka.Player(video);
 
   m.sources.forEach(s=>{
     const b=document.createElement("button");
     b.className="source-btn";
     b.innerText=s.name;
-    b.onclick=()=>loadStream(s);
+    b.onclick=()=>shakaPlayer.load(s.link);
     sources.appendChild(b);
   });
-  loadStream(m.sources[0]);
+
+  shakaPlayer.load(m.sources[0].link);
 }
 
-async function loadStream(source){
-  const url=source.link;
-  if(hls){ hls.destroy(); hls=null; }
-  if(shakaPlayer){ await shakaPlayer.destroy(); shakaPlayer=null; }
-
-  if(Hls.isSupported()){
-    hls=new Hls(); hls.loadSource(url); hls.attachMedia(video); hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-  } else { video.src=url; video.play(); }
+// ---------------- OTHER FUNCTIONS ----------------
+function goBack(){
+  video.pause();
+  document.getElementById("playerPage").style.display="none";
+  document.getElementById("matches").style.display="block";
 }
 
-function goBack(){ video.pause(); if(hls)hls.destroy(); document.getElementById("playerPage").style.display="none"; document.getElementById("matches").style.display="block"; }
-function pip(){ document.pictureInPictureElement?document.exitPictureInPicture():video.requestPictureInPicture(); }
-function share(){ navigator.share?navigator.share({text:playerTitle.innerText+"\nhttps://mrn6t9-byte.github.io/NAIM-X-LIVE/"}):alert(playerTitle.innerText+"\nhttps://mrn6t9-byte.github.io/NAIM-X-LIVE/"); }
-function joinTelegram(){ window.open("https://t.me/+EUu_2FFLJsdmMGU9","_blank"); }
-function closePopup(){ popup.style.display="none"; }
-function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"});}
+function pip(){
+  document.pictureInPictureElement
+    ? document.exitPictureInPicture()
+    : video.requestPictureInPicture();
+}
+
+function share(){
+  const text=playerTitle.innerText+"\nhttps://mrn6t9-byte.github.io/NAIM-X-LIVE/";
+  if(navigator.share){
+    navigator.share({text});
+  }else{
+    prompt("Copy & Share", text);
+  }
+}
+
+function joinTelegram(){
+  window.open("https://t.me/+EUu_2FFLJsdmMGU9","_blank");
+}
+
+function closePopup(){
+  popup.style.display="none";
+}
+
+function scrollToTop(){
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 </script>
 </body>
 </html>
